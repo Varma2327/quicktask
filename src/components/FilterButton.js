@@ -4,8 +4,8 @@ function FilterButtons({ filter, setFilter }) {
   const filters = ["All", "Active", "Completed"];
 
   return (
-   <div className="filter-buttons">
-  {filters.map((f) => (
+  <div className="filter-buttons">
+  {["All", "Active", "Completed"].map((f) => (
     <button
       key={f}
       onClick={() => setFilter(f)}
@@ -15,6 +15,7 @@ function FilterButtons({ filter, setFilter }) {
     </button>
   ))}
 </div>
+
   );
 }
 
