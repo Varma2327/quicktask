@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import FilterButtons from "./components/FilterButton";
+import FilterButtons from "./components/FilterButtons";
 import LiveClock from "./components/LiveClock";
+import confetti from "canvas-confetti";
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -26,6 +27,15 @@ function App() {
   };
 
   const toggleComplete = (id) => {
+    const task = tasks.find((t) => t.id === id);
+    if (!task.completed) {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }
+
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
@@ -44,9 +54,8 @@ function App() {
       <LiveClock />
       <div className="app">
         <p className="urgency-text">
-          ⏳ Time is ticking...!
+          ✈️ You have <strong>2h 30m</strong> before takeoff. Stay focused!
         </p>
-        <h1>QuickTask</h1>
         <TaskForm addTask={addTask} />
         <FilterButtons filter={filter} setFilter={setFilter} />
         <TaskList
