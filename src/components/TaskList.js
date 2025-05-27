@@ -1,16 +1,20 @@
 import React from "react";
-import TaskItem from "./TaskItem";
 
 function TaskList({ tasks, deleteTask, toggleComplete }) {
   return (
     <ul>
       {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          deleteTask={deleteTask}
-          toggleComplete={toggleComplete}
-        />
+        <li key={task.id}>
+          <input
+            type="checkbox"
+            checked={task.completed}
+            onChange={() => toggleComplete(task.id)}
+          />
+          <span style={{ textDecoration: task.completed ? "line-through" : "none" }}>
+            {task.text} {task.dueTime && `- due ${task.dueTime}`}
+          </span>
+          <button onClick={() => deleteTask(task.id)}>✖</button>
+        </li>
       ))}
     </ul>
   );
