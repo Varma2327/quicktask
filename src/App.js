@@ -7,9 +7,13 @@ import confetti from "canvas-confetti";
 
 const appStyle = {
   backgroundImage: "url('/assets/background.jpg')",
-  backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed",
+  backgroundSize: "contain",       
+  backgroundPosition: "center top", 
+  backgroundAttachment: "fixed",    
+  backgroundColor: "#ffffff",  
+  backgroundRepeat: "no-repeat",
+  backgroundColor: "#fff", 
   minHeight: "100vh",
   padding: "40px",
   fontFamily: "'Poppins', sans-serif"
