@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import FilterButtons from "./components/FilterButton";
-import './index.css';
+import FilterButtons from "./components/FilterButtons";
+import LiveClock from "./components/LiveClock";
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -26,9 +26,11 @@ function App() {
   };
 
   const toggleComplete = (id) => {
-    setTasks(tasks.map((task) =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -38,16 +40,22 @@ function App() {
   });
 
   return (
-    <div className="app">
-      <h1>QuickTask</h1>
-      <TaskForm addTask={addTask} />
-      <FilterButtons filter={filter} setFilter={setFilter} />
-      <TaskList
-        tasks={filteredTasks}
-        deleteTask={deleteTask}
-        toggleComplete={toggleComplete}
-      />
-    </div>
+    <>
+      <LiveClock />
+      <div className="app">
+        <p className="urgency-text">
+          ⏳ Time is ticking...!
+        </p>
+        <h1>QuickTask</h1>
+        <TaskForm addTask={addTask} />
+        <FilterButtons filter={filter} setFilter={setFilter} />
+        <TaskList
+          tasks={filteredTasks}
+          deleteTask={deleteTask}
+          toggleComplete={toggleComplete}
+        />
+      </div>
+    </>
   );
 }
 
