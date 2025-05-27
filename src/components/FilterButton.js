@@ -1,7 +1,6 @@
 import React from "react";
 
 function FilterButtons({ filter, setFilter }) {
-  const filters = ["All", "Active", "Completed"];
 
   return (
   <div className="filter-buttons">
