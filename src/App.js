@@ -95,6 +95,33 @@ function App() {
       )
     );
   };
+const appStyle = {
+  backgroundImage: "url('/assets/background.jpg')",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundAttachment: "fixed",
+  minHeight: "100vh",
+  padding: "40px",
+  fontFamily: "'Poppins', sans-serif"
+};
+
+function App() {
+  return (
+    <div style={appStyle}>
+      {/* Leave everything else inside here as-is */}
+      <LiveClock />
+      <div className="app">
+        <TaskForm addTask={addTask} />
+        <FilterButtons filter={filter} setFilter={setFilter} />
+        <TaskList
+          tasks={filteredTasks}
+          deleteTask={deleteTask}
+          toggleComplete={toggleComplete}
+        />
+      </div>
+    </div>
+  );
+}
 
   const filteredTasks = tasks.filter((task) => {
     if (filter === "Active") return !task.completed;
