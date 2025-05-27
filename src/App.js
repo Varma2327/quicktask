@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import FilterButtons from "./components/FilterButton";
+import FilterButtons from "./components/FilterButtons";
 import LiveClock from "./components/LiveClock";
 import confetti from "canvas-confetti";
 
@@ -17,8 +17,65 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (text) => {
-    const newTask = { id: Date.now(), text, completed: false };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const updatedTasks = tasks.map((task) => {
+        if (task.dueTime && !task.alerted30) {
+          const due = new Date(task.dueTime).getTime();
+          const diff = due - now;
+
+          if (diff <= 30 * 60 * 1000 && diff > 20 * 60 * 1000) {
+            alert(`⏰ 30 minutes left for: "${task.text}"`);
+            return { ...task, alerted30: true };
+          }
+        }
+
+        if (task.dueTime && !task.alerted20) {
+          const due = new Date(task.dueTime).getTime();
+          const diff = due - now;
+
+          if (diff <= 20 * 60 * 1000 && diff > 10 * 60 * 1000) {
+            alert(`⚠️ 20 minutes left for: "${task.text}"`);
+            return { ...task, alerted20: true };
+          }
+        }
+
+        if (task.dueTime && !task.alerted10) {
+          const due = new Date(task.dueTime).getTime();
+          const diff = due - now;
+
+          if (diff <= 10 * 60 * 1000 && diff > 0) {
+            alert(`⏳ 10 minutes left for: "${task.text}"`);
+            return { ...task, alerted10: true };
+          }
+        }
+
+        if (task.dueTime && !task.overdue) {
+          const due = new Date(task.dueTime).getTime();
+          const diff = due - now;
+
+          if (diff <= 0) {
+            alert(`❗ "${task.text}" is now overdue!`);
+            return { ...task, overdue: true };
+          }
+        }
+
+        return task;
+      });
+      setTasks(updatedTasks);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [tasks]);
+
+  const addTask = (text, dueTime) => {
+    const newTask = {
+      id: Date.now(),
+      text,
+      completed: false,
+      dueTime,
+    };
     setTasks([newTask, ...tasks]);
   };
 
@@ -29,11 +86,7 @@ function App() {
   const toggleComplete = (id) => {
     const task = tasks.find((t) => t.id === id);
     if (!task.completed) {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 
     setTasks(
@@ -53,9 +106,6 @@ function App() {
     <>
       <LiveClock />
       <div className="app">
-        <p className="urgency-text">
-          ✈️ You have <strong>2h 30m</strong> before takeoff. Stay focused!
-        </p>
         <TaskForm addTask={addTask} />
         <FilterButtons filter={filter} setFilter={setFilter} />
         <TaskList
