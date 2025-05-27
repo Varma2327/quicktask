@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import FilterButtons from "./components/FilterButtons";
+import FilterButtons from "./components/FilterButton";
 import './index.css';
 
 function App() {
