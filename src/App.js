@@ -5,6 +5,16 @@ import FilterButtons from "./components/FilterButton";
 import LiveClock from "./components/LiveClock";
 import confetti from "canvas-confetti";
 
+const appStyle = {
+  backgroundImage: "url('/assets/background.jpg')",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundAttachment: "fixed",
+  minHeight: "100vh",
+  padding: "40px",
+  fontFamily: "'Poppins', sans-serif"
+};
+
 function App() {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
@@ -21,44 +31,27 @@ function App() {
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const updatedTasks = tasks.map((task) => {
-        if (task.dueTime && !task.alerted30) {
-          const due = new Date(task.dueTime).getTime();
-          const diff = due - now;
+        const due = new Date(task.dueTime).getTime();
+        const diff = due - now;
 
-          if (diff <= 30 * 60 * 1000 && diff > 20 * 60 * 1000) {
-            alert(`⏰ 30 minutes left for: "${task.text}"`);
-            return { ...task, alerted30: true };
-          }
+        if (task.dueTime && !task.alerted30 && diff <= 30 * 60 * 1000 && diff > 20 * 60 * 1000) {
+          alert(`⏰ 30 minutes left for: "${task.text}"`);
+          return { ...task, alerted30: true };
         }
 
-        if (task.dueTime && !task.alerted20) {
-          const due = new Date(task.dueTime).getTime();
-          const diff = due - now;
-
-          if (diff <= 20 * 60 * 1000 && diff > 10 * 60 * 1000) {
-            alert(`⚠️ 20 minutes left for: "${task.text}"`);
-            return { ...task, alerted20: true };
-          }
+        if (task.dueTime && !task.alerted20 && diff <= 20 * 60 * 1000 && diff > 10 * 60 * 1000) {
+          alert(`⚠️ 20 minutes left for: "${task.text}"`);
+          return { ...task, alerted20: true };
         }
 
-        if (task.dueTime && !task.alerted10) {
-          const due = new Date(task.dueTime).getTime();
-          const diff = due - now;
-
-          if (diff <= 10 * 60 * 1000 && diff > 0) {
-            alert(`⏳ 10 minutes left for: "${task.text}"`);
-            return { ...task, alerted10: true };
-          }
+        if (task.dueTime && !task.alerted10 && diff <= 10 * 60 * 1000 && diff > 0) {
+          alert(`⏳ 10 minutes left for: "${task.text}"`);
+          return { ...task, alerted10: true };
         }
 
-        if (task.dueTime && !task.overdue) {
-          const due = new Date(task.dueTime).getTime();
-          const diff = due - now;
-
-          if (diff <= 0) {
-            alert(`❗ "${task.text}" is now overdue!`);
-            return { ...task, overdue: true };
-          }
+        if (task.dueTime && !task.overdue && diff <= 0) {
+          alert(`❗ "${task.text}" is now overdue!`);
+          return { ...task, overdue: true };
         }
 
         return task;
@@ -95,20 +88,15 @@ function App() {
       )
     );
   };
-const appStyle = {
-  backgroundImage: "url('/assets/background.jpg')",
-  backgroundSize: "cover",
-  backgroundRepeat: "no-repeat",
-  backgroundAttachment: "fixed",
-  minHeight: "100vh",
-  padding: "40px",
-  fontFamily: "'Poppins', sans-serif"
-};
 
-function App() {
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "Active") return !task.completed;
+    if (filter === "Completed") return task.completed;
+    return true;
+  });
+
   return (
     <div style={appStyle}>
-      {/* Leave everything else inside here as-is */}
       <LiveClock />
       <div className="app">
         <TaskForm addTask={addTask} />
@@ -120,28 +108,6 @@ function App() {
         />
       </div>
     </div>
-  );
-}
-
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "Active") return !task.completed;
-    if (filter === "Completed") return task.completed;
-    return true;
-  });
-
-  return (
-    <>
-      <LiveClock />
-      <div className="app">
-        <TaskForm addTask={addTask} />
-        <FilterButtons filter={filter} setFilter={setFilter} />
-        <TaskList
-          tasks={filteredTasks}
-          deleteTask={deleteTask}
-          toggleComplete={toggleComplete}
-        />
-      </div>
-    </>
   );
 }
 
