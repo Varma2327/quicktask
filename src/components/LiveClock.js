@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function LiveClock() {
   const [time, setTime] = useState(new Date());
@@ -15,7 +15,7 @@ function LiveClock() {
       right: "30px",
       fontSize: "20px",
       fontWeight: "600",
-      color: "#ffffffcc",
+      color: "#ffffffdd",
       textShadow: "1px 1px 4px rgba(0,0,0,0.7)"
     }}>
       {time.toLocaleTimeString()}
